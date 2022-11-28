@@ -10,7 +10,7 @@ use jcobhams\NewsApi\NewsApiException;
 
 class CategoryController
 {
-    public function index(array $vars)
+    public function index(array $vars): array
     {
         $categoryTitle = $vars['name'] ?? '';
         $title = $vars['title'] ?? '';

@@ -10,11 +10,7 @@ use jcobhams\NewsApi\NewsApiException;
 
 class ArticleController
 {
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
+
     public function index(array $vars) :array
     {
         $title=$vars['title']??'';
