@@ -84,3 +84,11 @@ footer{
 .category{
     text-align: center;
 }
+header{
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+#input-search{
+    margin:1px;
+}

@@ -20,21 +20,19 @@ class CategoryController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function index(string $categoryTitle = '',string $title = '')
+    public function index(array $vars)
     {
+        $categoryTitle = $vars['name'] ?? '';
+        $title = $vars['title'] ?? '';
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
-        try
-        {
-            if(in_array($categoryTitle, $newsApi->getCategories()))
-            {
-                $headlines = $newsApi->getTopHeadLines($title==='' ?null: $title,null, null, $categoryTitle);
+        try {
+            if (in_array($categoryTitle, $newsApi->getCategories())) {
+                $headlines = $newsApi->getTopHeadLines($title === '' ? null : $title, null, null, $categoryTitle);
 
             } else {
-                if($title !=='')
-                {
+                if ($title !== '') {
                     $headlines = $newsApi->getEverything($title, null, null);
-                } else
-                {
+                } else {
                     $headlines = $newsApi->getEverything($categoryTitle, null, null);
                 }
             }
@@ -43,10 +41,8 @@ class CategoryController
             $headlines = false;
         }
         $category = new Category($categoryTitle, new ArticlesCollection());
-        if ($headlines !== false && in_array($categoryTitle, $newsApi->getCategories()))
-        {
-            foreach ($headlines->articles as $article)
-            {
+        if ($headlines !== false && in_array($categoryTitle, $newsApi->getCategories())) {
+            foreach ($headlines->articles as $article) {
                 $category->addArticle(new Article(
                     $article->author,
                     $article->title,

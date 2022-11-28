@@ -19,8 +19,9 @@ class ArticleController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function index(string $title = '')
+    public function index(array $vars)
     {
+        $title=$vars['title']??'';
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
         try {
             if($title === ''){
