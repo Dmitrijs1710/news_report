@@ -8,7 +8,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 
-class TwigRender
+class Template
 {
     private string $link;
     private array $properties;
@@ -19,13 +19,25 @@ class TwigRender
         $this->link = $link;
     }
 
-    public function render(){
+    public function render() :string
+    {
         $loader = new FilesystemLoader('views/');
         $twig = new Environment($loader, []);
         try {
-            echo $twig->render($this->link, $this->properties);
+            return $twig->render($this->link, $this->properties);
         } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            var_dump($e->getMessage());
+            return ($e->getMessage());
         }
+    }
+
+    public function getLink(): string
+    {
+        return $this->link;
+    }
+
+
+    public function getProperties(): array
+    {
+        return $this->properties;
     }
 }

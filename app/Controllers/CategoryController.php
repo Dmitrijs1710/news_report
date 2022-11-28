@@ -8,10 +8,12 @@ use App\models\Category;
 use App\TwigRender;
 use jcobhams\NewsApi\NewsApi;
 use jcobhams\NewsApi\NewsApiException;
+use App\Template;
+
 
 class CategoryController
 {
-    public function index(array $vars): TwigRender
+    public function index(array $vars): Template
     {
         $categoryTitle = $vars['name'] ?? '';
         $title = $vars['title'] ?? '';
@@ -44,7 +46,7 @@ class CategoryController
                 ));
             }
         }
-        return new TwigRender('Category/index.html',[
+        return new Template('Category/index.html',[
             'articles' => $category->getArticles()->getAll(),
             'categories' => $newsApi->getCategories(),
             'currentCategory' => $category->getName()

@@ -41,6 +41,9 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
         [$controller, $method] = $handler;
         $vars['title'] = $_GET['search'] ?? '';
-        (new $controller)->{$method}($vars)->render() ?? null;
+        $response = (new $controller)->{$method}($vars);
+        if($response instanceof \App\Template){
+            echo $response->render();
+        }
         break;
 }
