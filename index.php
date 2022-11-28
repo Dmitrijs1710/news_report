@@ -40,14 +40,7 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         [$controller, $method] = $handler;
-        $vars['title'] = $_GET['article'] ?? '';
-        $return = (new $controller)->{$method}($vars);
-        $loader = new FilesystemLoader('views/');
-        $twig = new Environment($loader, []);
-        try {
-            echo $twig->render($return[0], $return[1]);
-        } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            var_dump($e->getMessage());
-        }
+        $vars['title'] = $_GET['search'] ?? '';
+        (new $controller)->{$method}($vars)->render() ?? null;
         break;
 }

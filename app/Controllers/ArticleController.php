@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\models\Article;
 use App\models\ArticlesCollection;
+use App\TwigRender;
 use jcobhams\NewsApi\NewsApi;
 use jcobhams\NewsApi\NewsApiException;
 
@@ -11,7 +12,7 @@ use jcobhams\NewsApi\NewsApiException;
 class ArticleController
 {
 
-    public function index(array $vars) :array
+    public function index(array $vars) : TwigRender
     {
         $title=$vars['title']??'';
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
@@ -39,10 +40,10 @@ class ArticleController
         }
 
 
-        return ['Article/index.html', [
+        return new TwigRender('Article/index.html', [
             'articles' => $articles->getAll(),
             'categories' => $newsApi->getCategories()
-        ]];
+        ]);
 
     }
 }

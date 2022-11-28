@@ -5,12 +5,13 @@ namespace App\Controllers;
 use App\models\Article;
 use App\models\ArticlesCollection;
 use App\models\Category;
+use App\TwigRender;
 use jcobhams\NewsApi\NewsApi;
 use jcobhams\NewsApi\NewsApiException;
 
 class CategoryController
 {
-    public function index(array $vars): array
+    public function index(array $vars): TwigRender
     {
         $categoryTitle = $vars['name'] ?? '';
         $title = $vars['title'] ?? '';
@@ -43,10 +44,10 @@ class CategoryController
                 ));
             }
         }
-        return(['Category/index.html',[
+        return new TwigRender('Category/index.html',[
             'articles' => $category->getArticles()->getAll(),
             'categories' => $newsApi->getCategories(),
             'currentCategory' => $category->getName()
-        ]]);
+        ]);
     }
 }
