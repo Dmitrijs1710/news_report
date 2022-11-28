@@ -1,0 +1,24 @@
+
+{% include 'header.html' %}
+{% include 'nav.html' %}
+
+<main class="article-content">
+    <h1 class="category">{{currentCategory | capitalize}}</h1>
+    <div class="article-container">
+        {% for article in articles|slice(0,10) %}
+        <div class="article">
+            <h2 class="article-header">{{ article.getTitle()}}</h2>
+            {% if article.getAuthor()!=null %}
+            <h3 class="article-author">{{ article.getAuthor()|e }}</h3>
+            {% endif %}
+            {% if article.getUrlToImage()!=null %}
+            <div class="article-img-container"><img class="article-img" src="{{ article.getUrlToImage()}}" alt="{{ article.getUrlToImage()}}"></div>
+            {% endif %}
+            <div class="article-description">{{ article.getDescription()}}</div>
+            <a class="article-link" href="{{article.getUrl()}}">Press to read it</a>
+            <div class="article-published">Published at: {{ article.getPublishedAt()|date("y-M-d T H:m:s")}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% include 'footer.html' %}

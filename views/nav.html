@@ -1,0 +1,5 @@
+<nav>
+    {% for category in categories %}
+        <a class="nav-element" href="/category={{category}}">{{ category|capitalize }}</a>
+    {% endfor %}
+</nav>
