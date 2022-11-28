@@ -6,11 +6,7 @@ use App\models\Article;
 use App\models\ArticlesCollection;
 use jcobhams\NewsApi\NewsApi;
 use jcobhams\NewsApi\NewsApiException;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
+
 
 class ArticleController
 {
@@ -19,7 +15,7 @@ class ArticleController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function index(array $vars)
+    public function index(array $vars) :array
     {
         $title=$vars['title']??'';
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
@@ -46,11 +42,11 @@ class ArticleController
             }
         }
 
-        $loader = new FilesystemLoader('views/');
-        $twig = new Environment($loader, []);
-        echo $twig->render('Article/index.html', [
+
+        return ['Article/index.html', [
             'articles' => $articles->getAll(),
             'categories' => $newsApi->getCategories()
-        ]);
+        ]];
+
     }
 }

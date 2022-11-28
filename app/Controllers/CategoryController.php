@@ -7,19 +7,9 @@ use App\models\ArticlesCollection;
 use App\models\Category;
 use jcobhams\NewsApi\NewsApi;
 use jcobhams\NewsApi\NewsApiException;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
 
 class CategoryController
 {
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
     public function index(array $vars)
     {
         $categoryTitle = $vars['name'] ?? '';
@@ -53,12 +43,10 @@ class CategoryController
                 ));
             }
         }
-        $loader = new FilesystemLoader('views/');
-        $twig = new Environment($loader, []);
-        echo $twig->render('Category/index.html', [
+        return(['Category/index.html',[
             'articles' => $category->getArticles()->getAll(),
             'categories' => $newsApi->getCategories(),
             'currentCategory' => $category->getName()
-        ]);
+        ]]);
     }
 }

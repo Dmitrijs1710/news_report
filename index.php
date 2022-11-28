@@ -2,6 +2,12 @@
 
 require_once 'vendor/autoload.php';
 
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -35,6 +41,9 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
         [$controller, $method] = $handler;
         $vars['title'] = $_GET['article']??'';
-        (new $controller)->{$method}($vars);
+        $return = (new $controller)->{$method}($vars);
+        $loader = new FilesystemLoader('views/');
+        $twig = new Environment($loader, []);
+        echo $twig->render($return[0],$return[1]);
         break;
 }
