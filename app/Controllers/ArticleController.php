@@ -2,47 +2,24 @@
 
 namespace App\Controllers;
 
-use App\models\Article;
-use App\models\ArticlesCollection;
+use App\Services\CategoryNavigationService;
+use App\Services\IndexArticleService;
 use App\Template;
-use jcobhams\NewsApi\NewsApi;
-use jcobhams\NewsApi\NewsApiException;
 
 
 class ArticleController
 {
 
-    public function index(array $vars) : Template
+    public function index(): Template
     {
-        $title=$vars['title']??'';
-        $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
-        try {
-            if($title === ''){
-                $headlines = $newsApi->getTopHeadLines(null, null, 'lv');
-            } else {
-                $headlines = $newsApi->getTopHeadLines($title);
-            }
-        } catch (NewsApiException $e) {
-            $headlines = false;
-        }
-        $articles = new ArticlesCollection();
-        if ($headlines !== false) {
-            foreach ($headlines->articles as $article) {
-                $articles->add(new Article(
-                    $article->author,
-                    $article->title,
-                    $article->url,
-                    $article->publishedAt,
-                    $article->description,
-                    $article->urlToImage
-                ));
-            }
-        }
+        $title = $_GET['search'] ?? '';
 
+        $articles = (new IndexArticleService())->execute($title);
+        $menu = (new CategoryNavigationService())->getMenu();
 
         return new Template('Article/index.html', [
             'articles' => $articles->getAll(),
-            'categories' => $newsApi->getCategories()
+            'categories' => $menu
         ]);
 
     }

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\models;
+namespace App\Models\Collections;
+
+use App\Models\Article;
 
 class ArticlesCollection
 {

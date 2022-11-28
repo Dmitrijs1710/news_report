@@ -1,6 +1,8 @@
 <?php
 
-namespace App\models;
+namespace App\Models;
+
+use App\Models\Collections\ArticlesCollection;
 
 class Category
 {
@@ -23,7 +25,7 @@ class Category
         return $this->articles;
     }
 
-    public function addArticle(Article $article) :void
+    public function addArticle(Article $article): void
     {
         $this->articles->add($article);
     }

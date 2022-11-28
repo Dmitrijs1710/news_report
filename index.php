@@ -2,6 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
+use App\Template;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -10,6 +11,9 @@ use Twig\Loader\FilesystemLoader;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+$loader = new FilesystemLoader('views/');
+$twig = new Environment($loader, []);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/article={title}', ['\App\Controllers\ArticleController', 'index']);
@@ -40,10 +44,13 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         [$controller, $method] = $handler;
-        $vars['title'] = $_GET['search'] ?? '';
         $response = (new $controller)->{$method}($vars);
-        if($response instanceof \App\Template){
-            echo $response->render();
+        if ($response instanceof Template) {
+            try {
+                echo $twig->render($response->getLink(), $response->getProperties());
+            } catch (LoaderError|RuntimeError|SyntaxError $e) {
+                echo ($e->getMessage());
+            }
         }
         break;
 }

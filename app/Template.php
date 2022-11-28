@@ -2,12 +2,6 @@
 
 namespace App;
 
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
-
 class Template
 {
     private string $link;
@@ -17,17 +11,6 @@ class Template
     {
         $this->properties = $properties;
         $this->link = $link;
-    }
-
-    public function render() :string
-    {
-        $loader = new FilesystemLoader('views/');
-        $twig = new Environment($loader, []);
-        try {
-            return $twig->render($this->link, $this->properties);
-        } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            return ($e->getMessage());
-        }
     }
 
     public function getLink(): string
@@ -40,4 +23,5 @@ class Template
     {
         return $this->properties;
     }
+
 }
