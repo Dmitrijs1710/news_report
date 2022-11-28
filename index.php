@@ -6,9 +6,9 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/?article={title}', ['\App\Controllers\ArticleController','index']);
+    $r->addRoute('GET', '/article={title}', ['\App\Controllers\ArticleController','index']);
     $r->addRoute('GET', '/category={name}', ['\App\Controllers\CategoryController','index']);
-    $r->addRoute('GET', '/category={name}?article={title}', ['\App\Controllers\CategoryController','index']);
+    $r->addRoute('GET', '/category={name}/article={title}', ['\App\Controllers\CategoryController','index']);
     $r->addRoute('GET', '/', ['\App\Controllers\ArticleController','index']);
 });
 
