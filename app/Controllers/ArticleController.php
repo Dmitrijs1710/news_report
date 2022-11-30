@@ -16,7 +16,7 @@ class ArticleController
         $country = $vars['country'] ?? null;
 
         $articles = (new IndexArticleService())->execute($title, $country);
-        $menu = (new CategoryNavigationService())->getMenu();
+        $menu = (new CategoryNavigationService())->getCategoryMenu();
 
         return new Template('Article/index.html', [
             'articles' => $articles->getAll(),

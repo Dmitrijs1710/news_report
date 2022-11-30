@@ -14,7 +14,7 @@ class CategoryController
         $title = $_GET['search'] ?? null;
         $country = $vars['country'] ?? null;
         $category = (new CategoryNavigationService())->execute($title, $categoryTitle, $country);
-        $menu = (new CategoryNavigationService())->getMenu();
+        $menu = (new CategoryNavigationService())->getCategoryMenu();
 
         return new Template('Category/index.html', [
             'articles' => $category->getArticles()->getAll(),

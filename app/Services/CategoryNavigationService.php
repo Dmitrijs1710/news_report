@@ -45,7 +45,7 @@ class CategoryNavigationService
         return ($category);
     }
 
-    public function getMenu(): array
+    public function getCategoryMenu(): array
     {
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
         return $newsApi->getCategories();
