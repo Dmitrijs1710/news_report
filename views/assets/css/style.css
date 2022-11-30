@@ -37,8 +37,7 @@ nav {
     min-width: 5%;
     text-align: center;
 }
-
-.nav-element:active {
+.active {
     background-color: white;
     color: red;
 }
@@ -48,10 +47,7 @@ nav {
     color: red;
 }
 
-.nav-element:active {
-    background-color: white;
-    color: red;
-}
+
 
 .article-container {
     align-self: center;
