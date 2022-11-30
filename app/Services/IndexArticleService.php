@@ -10,14 +10,17 @@ use jcobhams\NewsApi\NewsApiException;
 class IndexArticleService
 {
 
-    public function execute(string $title): ArticlesCollection
+    public function execute(?string $title,?string $country): ArticlesCollection
     {
+
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
         try {
-            if ($title === '') {
-                $headlines = $newsApi->getTopHeadLines(null, null, 'lv');
+            if($country!==null)
+            {
+                $headlines = $newsApi->getTopHeadLines($title ?? null, null, $country ?? null);
+
             } else {
-                $headlines = $newsApi->getTopHeadLines($title);
+                $headlines = $newsApi->getEverything($title ??'a',null,null,null, '2022-11-16');
             }
         } catch (NewsApiException $e) {
             $headlines = false;

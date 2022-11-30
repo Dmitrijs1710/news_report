@@ -16,10 +16,16 @@ $loader = new FilesystemLoader('views/');
 $twig = new Environment($loader, []);
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    //article
+    $r->addRoute('GET', '/', ['\App\Controllers\ArticleController', 'index']);
+    $r->addRoute('GET', '/country={country}', ['\App\Controllers\ArticleController', 'index']);
     $r->addRoute('GET', '/article={title}', ['\App\Controllers\ArticleController', 'index']);
+    $r->addRoute('GET', '/country={country}/article={title}', ['\App\Controllers\ArticleController', 'index']);
+    //category
+    $r->addRoute('GET', '/country={country}/category={name}', ['\App\Controllers\CategoryController', 'index']);
     $r->addRoute('GET', '/category={name}', ['\App\Controllers\CategoryController', 'index']);
     $r->addRoute('GET', '/category={name}/article={title}', ['\App\Controllers\CategoryController', 'index']);
-    $r->addRoute('GET', '/', ['\App\Controllers\ArticleController', 'index']);
+    $r->addRoute('GET', '/country={country}/category={name}/article={title}', ['\App\Controllers\CategoryController', 'index']);
 });
 
 // Fetch method and URI from somewhere
@@ -49,7 +55,7 @@ switch ($routeInfo[0]) {
             try {
                 echo $twig->render($response->getLink(), $response->getProperties());
             } catch (LoaderError|RuntimeError|SyntaxError $e) {
-                echo ($e->getMessage());
+                echo($e->getMessage());
             }
         }
         break;

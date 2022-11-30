@@ -10,16 +10,16 @@ use jcobhams\NewsApi\NewsApiException;
 
 class CategoryNavigationService
 {
-    public function execute(string $title, string $categoryTitle): Category
+    public function execute(?string $title, ?string $categoryTitle, ?string $country): Category
     {
 
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
         try {
             if (in_array($categoryTitle, $newsApi->getCategories())) {
-                $headlines = $newsApi->getTopHeadLines($title === '' ? null : $title, null, null, $categoryTitle);
+                $headlines = $newsApi->getTopHeadLines($title?? null,null, $country ?? null, $categoryTitle);
 
             } else {
-                if ($title !== '') {
+                if ($title !== null) {
                     $headlines = $newsApi->getEverything($title);
                 } else {
                     $headlines = $newsApi->getEverything($categoryTitle);
@@ -30,7 +30,7 @@ class CategoryNavigationService
             $headlines = false;
         }
         $category = new Category($categoryTitle, new ArticlesCollection());
-        if ($headlines !== false && in_array($categoryTitle, $newsApi->getCategories())) {
+        if ($headlines !== false) {
             foreach ($headlines->articles as $article) {
                 $category->addArticle(new Article(
                     $article->author,
