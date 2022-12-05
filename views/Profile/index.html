@@ -1,0 +1,15 @@
+{% include 'header.html' %}
+{% include 'nav.html' %}
+
+<main class="profile">
+    <div id="profile-id">
+        Id: {{ user.getId }}
+    </div>
+    <div id="profile-">
+        Name: {{ user.getName }}
+    </div>
+    <div id="profile-email">
+        Email: {{ user.getEMail }}
+    </div>
+</main>
+{% include 'footer.html' %}

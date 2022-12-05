@@ -16,7 +16,7 @@ class CategoryNavigationService
         $newsApi = new NewsApi($_ENV['NEWS_API_KEY']);
         try {
             if (in_array($categoryTitle, $newsApi->getCategories())) {
-                $headlines = $newsApi->getTopHeadLines($title?? null,null, $country ?? null, $categoryTitle);
+                $headlines = $newsApi->getTopHeadLines($title ?? null, null, $country ?? null, $categoryTitle);
 
             } else {
                 if ($title !== null) {

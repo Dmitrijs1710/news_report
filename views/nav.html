@@ -1,9 +1,14 @@
 <nav>
-    <a class="nav-element" href="/">World</a>
-    <a class="nav-element" href="/country=us">US</a>
-    <a class="nav-element" href="/country=lv">Latvia</a>
-    {% for category in categories %}
-        <a class="nav-element" href="{% if(country!=null) %}/country={{country}}{% endif %}/category={{category}}">{{ category|capitalize }}</a>
-    {% endfor %}
+    <div id="nav-element-container-1">
+        <a class="nav-element" href="/">World</a>
+        <a class="nav-element" href="/country=us">US</a>
+        <a class="nav-element" href="/country=lv">Latvia</a>
+    </div>
+    <div id="nav-element-container-2">
+        {% for category in categories %}
+        <a class="nav-element-2" href="{% if(country!=null) %}/country={{country}}{% endif %}/category={{category}}">{{
+            category|capitalize }}</a>
+        {% endfor %}
+        <div>
 </nav>
 

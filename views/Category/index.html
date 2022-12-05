@@ -1,9 +1,13 @@
-
 {% include 'header.html' %}
 {% include 'nav.html' %}
 
 <main class="article-content">
-    <h1 class="category">{{currentCategory | capitalize}}</h1>
+    <form method="get" id="search-form">
+        <label for="input-search"></label>
+        <input id="input-search" type="text" name="search" placeholder="{{placeholder}}">
+        <input id="submit-button" type="submit" value="Search">
+    </form>
+    <h1 class="category">{% if country %}{{country}}->{%endif%} {{currentCategory | capitalize}}</h1>
     <div class="article-container">
         {% for article in articles|slice(0,10) %}
         <div class="article">
@@ -12,7 +16,11 @@
             <h3 class="article-author">Author: {{ article.getAuthor()|e }}</h3>
             {% endif %}
             {% if article.getUrlToImage()!=null %}
-            <div class="article-img-container"><img class="article-img" src="{{ article.getUrlToImage()}}" alt="{{ article.getUrlToImage()}}"></div>
+            <div class="article-img-container">
+
+                <img class="article-img" src="{{ article.getUrlToImage()}}" alt="{{ article.getUrlToImage()}}">
+
+            </div>
             {% endif %}
             <div class="article-description">{{ article.getDescription()}}</div>
             <div class="article-extra">

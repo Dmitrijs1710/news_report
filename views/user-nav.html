@@ -1,0 +1,17 @@
+<div id="user-container">
+    <div id="user-nav">
+        {% if not login%}
+        <a class="nav-element-user" href="/login">Login</a>
+        <a class="nav-element-user" href="/registration">Registration</a>
+        {% endif %}
+        {% if login %}
+        <a class="nav-element-user" href="/logout">Logout</a>
+        {% endif %}
+    </div>
+    {% if login %}
+    <div id="user-welcome">
+        <div id="user-welcome-name">Welcome, {{login.getName | capitalize}}</div>
+        <a class="nav-element-user" href="/profile">Profile</a>
+    </div>
+    {% endif %}
+</div>

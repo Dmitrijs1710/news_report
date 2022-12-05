@@ -17,7 +17,7 @@ class ArticlesCollection
 
     }
 
-    public function add(Article $article)
+    public function add(Article $article): void
     {
         $this->articles[] = $article;
     }

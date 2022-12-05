@@ -9,6 +9,8 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 
+session_start();
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -26,6 +28,13 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('GET', '/category={name}', ['\App\Controllers\CategoryController', 'index']);
     $r->addRoute('GET', '/category={name}/article={title}', ['\App\Controllers\CategoryController', 'index']);
     $r->addRoute('GET', '/country={country}/category={name}/article={title}', ['\App\Controllers\CategoryController', 'index']);
+    $r->addRoute('GET', '/login', ['\App\Controllers\UserLoginController', 'index']);
+    $r->addRoute('POST', '/login', ['\App\Controllers\UserLoginController', 'loginHandler']);
+    $r->addRoute('GET', '/registration', ['\App\Controllers\RegistrationController', 'index']);
+    $r->addRoute('POST', '/registration', ['\App\Controllers\RegistrationController', 'registrationHandler']);
+    $r->addRoute('GET', '/logout', ['\App\Controllers\UserLoginController', 'logoutHandler']);
+    $r->addRoute('GET', '/profile', ['\App\Controllers\ProfileController', 'index']);
+
 });
 
 // Fetch method and URI from somewhere
@@ -36,7 +45,6 @@ if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);
 }
 $uri = rawurldecode($uri);
-
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
@@ -51,6 +59,7 @@ switch ($routeInfo[0]) {
         $vars = $routeInfo[2];
         [$controller, $method] = $handler;
         $response = (new $controller)->{$method}($vars);
+
         if ($response instanceof Template) {
             try {
                 echo $twig->render($response->getLink(), $response->getProperties());
