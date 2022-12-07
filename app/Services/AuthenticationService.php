@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Database;
 use App\Models\User;
 
 class AuthenticationService
@@ -10,7 +11,7 @@ class AuthenticationService
     {
 
 // Check connection
-        $database = (new DatabaseInitializeService())->execute();
+        $database = Database::getConnection();
 
         $sql = "SELECT id,email, name, password FROM users WHERE email='" . $user->getEmail() . "'";
         $result = $database->query($sql);
@@ -24,8 +25,6 @@ class AuthenticationService
                 }
             }
         }
-        unset($_SESSION['id']);
-        $database->close();
         return false;
 
 

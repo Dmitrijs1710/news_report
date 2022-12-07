@@ -9,15 +9,19 @@
             <hr>
             <label for="name"><b>Name</b></label>
             <input type="text" placeholder="Enter name" name="name" id="name" required>
+            {{error.name}}
             <br>
             <label for="email"><b>Email</b></label>
             <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            {{error.email}}
             <br>
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" id="psw" required>
+            {{error.password}}
             <br>
             <label for="psw-repeat"><b>Repeat Password</b></label>
             <input type="password" placeholder="Repeat Password" name="passwordRepeat" id="psw-repeat" required>
+            {{error.passwordRepeat}}
             <hr>
             {%if message %}
             <div>{{ message }}</div>

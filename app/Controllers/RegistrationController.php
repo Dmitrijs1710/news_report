@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 use App\Models\User;
-use App\Services\CategoryNavigationService;
+use App\Redirect;
 use App\Services\RegistrationService;
-use App\Services\UserInformationGetterService;
 use App\Template;
-use Exception;
+use App\Validate;
+
 
 class RegistrationController
 {
@@ -17,38 +17,25 @@ class RegistrationController
             header("Location: /");
             exit();
         }
-        $menu = (new CategoryNavigationService())->getCategoryMenu();
         return new Template('Registration/registration.html', [
-            'categories' => $menu,
-            'login' => null
         ]);
     }
 
-    public function registrationHandler(): Template
+    public function registrationHandler(): Redirect
     {
-        $menu = (new CategoryNavigationService())->getCategoryMenu();
-        if ($_POST['password'] !== $_POST['passwordRepeat']) {
-            return new Template('Registration/registration.html', [
-                'categories' => $menu,
-                'message' => "Passwords don't match",
-                'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
-            ]);
-        }
+        Validate::passwordMatch($_POST['password'], $_POST['passwordRepeat']);
+        Validate::passwordChecker($_POST['password']);
+        Validate::emailChecker($_POST['email']);
+        Validate::nameChecker($_POST['name']);
         $user = new User($_POST['email'], $_POST['name'], $_POST['password']);
-        try {
-            (new RegistrationService())->execute($user);
-            return new Template('Registration/successful.html', [
-                'categories' => $menu,
-                'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
-            ]);
-        } catch (Exception $e) {
-            return new Template('Registration/registration.html', [
-                'categories' => $menu,
-                'message' => $e->getMessage(),
-                'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
-            ]);
+        if ((new RegistrationService())->execute($user)){
+            return new Redirect('/registration/successful');
+        } else{
+            return new Redirect('/registration');
         }
-
-
+    }
+    public function registeredHandler(): Template{
+        return new Template('Registration/successful.html', [
+        ]);
     }
 }

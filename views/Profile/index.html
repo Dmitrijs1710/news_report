@@ -2,14 +2,43 @@
 {% include 'nav.html' %}
 
 <main class="profile">
-    <div id="profile-id">
-        Id: {{ user.getId }}
-    </div>
-    <div id="profile-">
-        Name: {{ user.getName }}
+    <div id="profile-name">
+        Name: {{ login.name }}
+        <form id="name-form" action="/profile" method="post">
+            <label for="name"><b>Enter new name</b></label>
+            <input type="text" placeholder="Enter Name" name="name" id="name" required>
+            <button type="submit" class="submit-button">change name</button>
+        </form>
+        {{error.name}}
+        <br>
+        <hr>
     </div>
     <div id="profile-email">
-        Email: {{ user.getEMail }}
+        Email: {{ login.email }}
+        <form id="email-form" action="/profile" method="post">
+            <label for="email"><b>Enter new email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            <button type="submit" class="submit-button">change email</button>
+        </form>
+        {{error.email}}
+        <br>
+        <hr>
     </div>
+    <div id="profile-password">
+        Change Password:
+        <form id="password-form" action="/profile" method="post">
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+            {{error.password}}
+            <br>
+            <label for="passwordRepeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="passwordRepeat" id="passwordRepeat" required>
+            {{error.passwordRepeat}}
+            <br>
+            <button type="submit" class="submit-button">change password</button>
+        </form>
+        <br>
+    </div>
+
 </main>
 {% include 'footer.html' %}

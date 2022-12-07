@@ -14,8 +14,8 @@
 
             <button type="submit" class="register-button">Login</button>
             <br>
-            {%if message %}
-            <div>{{ message }}</div>
+            {%if error.message %}
+            <div>{{ error.message }}</div>
             {%endif%}
         </div>
 

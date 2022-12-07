@@ -2,6 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
+use App\Redirect;
 use App\Template;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -14,8 +15,7 @@ session_start();
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$loader = new FilesystemLoader('views/');
-$twig = new Environment($loader, []);
+
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     //article
@@ -34,9 +34,25 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('POST', '/registration', ['\App\Controllers\RegistrationController', 'registrationHandler']);
     $r->addRoute('GET', '/logout', ['\App\Controllers\UserLoginController', 'logoutHandler']);
     $r->addRoute('GET', '/profile', ['\App\Controllers\ProfileController', 'index']);
+    $r->addRoute('POST', '/profile', ['\App\Controllers\ProfileController', 'updateData']);
+    $r->addRoute('GET', '/registration/successful', ['\App\Controllers\RegistrationController', 'registeredHandler']);
+    $r->addRoute('GET', '/login/successful', ['\App\Controllers\UserLoginController', 'successful']);
 
 });
+$loader = new FilesystemLoader('views/');
+$twig = new Environment($loader, []);
 
+$localVariables = [
+    \App\ViewVariables\LoginVariables::class,
+    \App\ViewVariables\ErrorVariables::class,
+    \App\ViewVariables\MenuVariables::class
+];
+
+foreach ($localVariables as $variable)
+{
+    $variable = new $variable;
+    $twig->addGlobal($variable->getName(),$variable->getValues());
+}
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -60,12 +76,19 @@ switch ($routeInfo[0]) {
         [$controller, $method] = $handler;
         $response = (new $controller)->{$method}($vars);
 
-        if ($response instanceof Template) {
+        if ($response instanceof Template)
+        {
             try {
                 echo $twig->render($response->getLink(), $response->getProperties());
+                unset($_SESSION['error']);
             } catch (LoaderError|RuntimeError|SyntaxError $e) {
                 echo($e->getMessage());
             }
         }
+        if ($response instanceof Redirect)
+        {
+            header('Location: ' . $response->getLink());
+        }
+
         break;
 }

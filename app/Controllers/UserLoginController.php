@@ -2,9 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Redirect;
 use App\Services\AuthenticationService;
-use App\Services\CategoryNavigationService;
-use App\Services\UserInformationGetterService;
 use App\Services\UserLoginRequest;
 use App\Template;
 
@@ -16,42 +15,33 @@ class UserLoginController
             header("Location: /");
             exit();
         }
-        $menu = (new CategoryNavigationService())->getCategoryMenu();
         return new Template('Login/login.html', [
-            'categories' => $menu,
-            'login' => null
         ]);
     }
 
-    public function loginHandler(): Template
+    public function loginHandler(): Redirect
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $menu = (new CategoryNavigationService())->getCategoryMenu();
         $response = (new AuthenticationService())->execute(new UserLoginRequest($email, $password));
         if ($response) {
-            return new Template('/Login/successful.html', [
-                'categories' => $menu,
-                'message' => 'Login',
-                'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
-            ]);
+            return new Redirect('/login/successful');
         }
-        return new Template('/Login/login.html', [
-            'categories' => $menu,
-            'message' => 'Incorrect email or password',
-            'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
-        ]);
+        $_SESSION['error']['message']="Incorrect email or password";
+        return new Redirect('/login');
 
     }
 
-    public function logoutHandler(): Template
+    public function logoutHandler(): Redirect
     {
-        $menu = (new CategoryNavigationService())->getCategoryMenu();
         unset($_SESSION['id']);
+        return new Redirect('/login');
+    }
+
+    public function successful() :Template{
         return new Template('/Login/successful.html', [
-            'categories' => $menu,
-            'message' => 'Logout',
-            'login' => $_SESSION['id'] !== null ? (new UserInformationGetterService())->execute($_SESSION['id']) : null
+            'message' => 'Login'
         ]);
+
     }
 }
