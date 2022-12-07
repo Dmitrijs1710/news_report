@@ -28,13 +28,15 @@ class RegistrationController
         Validate::emailChecker($_POST['email']);
         Validate::nameChecker($_POST['name']);
         $user = new User($_POST['email'], $_POST['name'], $_POST['password']);
-        if ((new RegistrationService())->execute($user)){
+        if ((new RegistrationService())->execute($user)) {
             return new Redirect('/registration/successful');
-        } else{
+        } else {
             return new Redirect('/registration');
         }
     }
-    public function registeredHandler(): Template{
+
+    public function registeredHandler(): Template
+    {
         return new Template('Registration/successful.html', [
         ]);
     }

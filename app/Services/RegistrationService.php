@@ -11,7 +11,7 @@ class RegistrationService
     public function execute(User $user): bool
     {
 
-        if (!empty($_SESSION['error'])){
+        if (!empty($_SESSION['error'])) {
             return false;
         }
 // Create connection

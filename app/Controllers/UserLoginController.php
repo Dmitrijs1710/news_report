@@ -27,7 +27,7 @@ class UserLoginController
         if ($response) {
             return new Redirect('/login/successful');
         }
-        $_SESSION['error']['message']="Incorrect email or password";
+        $_SESSION['error']['message'] = "Incorrect email or password";
         return new Redirect('/login');
 
     }
@@ -38,9 +38,9 @@ class UserLoginController
         return new Redirect('/login');
     }
 
-    public function successful() :Template{
+    public function successful(): Template
+    {
         return new Template('/Login/successful.html', [
-            'message' => 'Login'
         ]);
 
     }

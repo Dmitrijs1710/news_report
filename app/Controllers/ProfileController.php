@@ -23,21 +23,20 @@ class ProfileController
 
     public function updateData(): Redirect
     {
-        if($_POST['name']!=null){
+        if ($_POST['name'] != null) {
             Validate::nameChecker($_POST['name']);
-            $field='name';
-        } else if ($_POST['password']!=null)
-        {
+            $field = 'name';
+        } else if ($_POST['password'] != null) {
             Validate::passwordMatch($_POST['password'], $_POST['passwordRepeat']);
             Validate::passwordChecker($_POST['password']);
-            $field='password';
+            $field = 'password';
         } else {
             Validate::emailChecker($_POST['email']);
-            $field='email';
+            $field = 'email';
         }
-        if(empty($_SESSION['error'])) {
-            if ((new UserDataUpdateService())->execute($field,$_POST[$field],$_SESSION['id'])){
-            $_SESSION['error'][$field] = 'successfully changed';
+        if (empty($_SESSION['error'])) {
+            if ((new UserDataUpdateService())->execute($field, $_POST[$field], $_SESSION['id'])) {
+                $_SESSION['error'][$field] = 'successfully changed';
             } else {
 
                 $_SESSION['error'][$field] = 'database error';

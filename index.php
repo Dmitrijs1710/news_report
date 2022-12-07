@@ -15,8 +15,6 @@ session_start();
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-
-
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     //article
     $r->addRoute('GET', '/', ['\App\Controllers\ArticleController', 'index']);
@@ -48,11 +46,11 @@ $localVariables = [
     \App\ViewVariables\MenuVariables::class
 ];
 
-foreach ($localVariables as $variable)
-{
+foreach ($localVariables as $variable) {
     $variable = new $variable;
-    $twig->addGlobal($variable->getName(),$variable->getValues());
+    $twig->addGlobal($variable->getName(), $variable->getValues());
 }
+
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
@@ -76,8 +74,7 @@ switch ($routeInfo[0]) {
         [$controller, $method] = $handler;
         $response = (new $controller)->{$method}($vars);
 
-        if ($response instanceof Template)
-        {
+        if ($response instanceof Template) {
             try {
                 echo $twig->render($response->getLink(), $response->getProperties());
                 unset($_SESSION['error']);
@@ -85,10 +82,8 @@ switch ($routeInfo[0]) {
                 echo($e->getMessage());
             }
         }
-        if ($response instanceof Redirect)
-        {
+        if ($response instanceof Redirect) {
             header('Location: ' . $response->getLink());
         }
-
         break;
 }
